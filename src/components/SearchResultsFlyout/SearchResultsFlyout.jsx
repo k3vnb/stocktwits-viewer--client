@@ -3,7 +3,11 @@ import { shape, string, arrayOf, number, func } from 'prop-types';
 import AppContext from '../../AppContext';
 import './SearchResultsFlyout.css';
 
-const AutoCompleteFlyout = ({ searchResults, toggleShowSearchResults }) => {
+const AutoCompleteFlyout = ({
+  searchResults,
+  toggleShowSearchResults,
+  clearSearchTerm,
+}) => {
   const { selectedSymbols, addSelectedSymbol } = useContext(AppContext);
   const handleSelectSymbol = (symbol) => {
     // console.log(symbol);
@@ -11,6 +15,7 @@ const AutoCompleteFlyout = ({ searchResults, toggleShowSearchResults }) => {
       return alert('This symbol has already been selected');
     }
     addSelectedSymbol(symbol);
+    clearSearchTerm();
     return toggleShowSearchResults();
   };
   const handleKeyDown = (e, symbol) => {
@@ -58,6 +63,7 @@ AutoCompleteFlyout.propTypes = {
     }).isRequired
   ),
   toggleShowSearchResults: func.isRequired,
+  clearSearchTerm: func.isRequired,
 };
 
 AutoCompleteFlyout.defaultProps = {

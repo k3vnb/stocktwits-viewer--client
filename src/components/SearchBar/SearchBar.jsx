@@ -8,6 +8,7 @@ const SearchBar = () => {
   const [searchResults, setSearchResults] = useState([]);
   const toggleShowSearchResults = () =>
     setShowSearchResults(!showSearchResults);
+  const clearSearchTerm = () => setSearchTerm('');
   useEffect(() => {
     if (searchTerm.length > 1) {
       return setShowSearchResults(true);
@@ -48,6 +49,7 @@ const SearchBar = () => {
         <SearchResultsFlyout
           searchResults={searchResults}
           toggleShowSearchResults={toggleShowSearchResults}
+          clearSearchTerm={clearSearchTerm}
         />
       )}
     </>
