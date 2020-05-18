@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import AppContext from './AppContext';
 import socketIOClient from 'socket.io-client';
+import AppContext from './AppContext';
 import ChipContainer from './components/ChipContainer/ChipContainer';
 import SearchBar from './components/SearchBar/SearchBar';
 
-const ENDPOINT = 'http://localhost:8000?params=AAPL,MSFT';
+const ENDPOINT = 'http://localhost:8000?params=';
 
 function App() {
   const [response, setResponse] = useState('');
@@ -16,22 +16,18 @@ function App() {
       title: 'Catalent',
       type: 'symbol',
     },
-    {
-      exchange: 'NYSE',
-      id: 2144,
-      symbol: 'AXL',
-      title: 'Axelant',
-      type: 'symbol',
-    },
   ]);
 
-  // useEffect(() => {
-  //   const socket = socketIOClient(ENDPOINT);
-  //   socket.on('FromAPI', (data) => {
-  //     setResponse(data);
-  //   });
-  //   console.log(response);
-  // }, [response]);
+  useEffect(() => {
+    if (selectedSymbols.length) {
+      const queryString = selectedSymbols.map(({ symbol }) => symbol).join(',');
+      const socket = socketIOClient(`${ENDPOINT}/${queryString}`);
+      socket.on('FromAPI', (data) => {
+        setResponse(data);
+      });
+      console.log(response);
+    }
+  }, [response, selectedSymbols]);
 
   const addSelectedSymbol = (newSymbol) =>
     setSelectedSymbols([...selectedSymbols, newSymbol]);
