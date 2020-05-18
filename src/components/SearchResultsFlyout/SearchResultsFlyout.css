@@ -1,0 +1,12 @@
+.results__list-item {
+  padding: 5px 10px;
+  border-bottom: 1px solid grey;
+}
+.results__list-item:hover {
+  background-color: yellow;
+  cursor: pointer;
+}
+.results__list-item--title,
+.results__list-item--subtitle {
+  margin: 0;
+}

@@ -6,6 +6,8 @@ const SearchBar = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [showSearchResults, setShowSearchResults] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
+  const toggleShowSearchResults = () =>
+    setShowSearchResults(!showSearchResults);
   useEffect(() => {
     if (searchTerm.length > 1) {
       return setShowSearchResults(true);
@@ -14,8 +16,8 @@ const SearchBar = () => {
   }, [searchTerm]);
   const setNewSearchString = async (e) => {
     setSearchTerm(e.target.value);
-    if (searchTerm.length > 1) {
-      setShowSearchResults(true);
+    // character length is set to mitigate exceeding rate limit
+    if (searchTerm.length > 2 && searchTerm.length < 5) {
       const searchResultsList = await fetch(
         `http://localhost:8001/api/${e.target.value}`
       )
@@ -43,7 +45,10 @@ const SearchBar = () => {
         autoComplete="off"
       />
       {showSearchResults && (
-        <SearchResultsFlyout searchResults={searchResults} />
+        <SearchResultsFlyout
+          searchResults={searchResults}
+          toggleShowSearchResults={toggleShowSearchResults}
+        />
       )}
     </>
   );

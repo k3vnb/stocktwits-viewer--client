@@ -1,19 +1,45 @@
-import React from 'react';
-import { shape, string, arrayOf, number } from 'prop-types';
+import React, { useContext } from 'react';
+import { shape, string, arrayOf, number, func } from 'prop-types';
+import AppContext from '../../AppContext';
+import './SearchResultsFlyout.css';
 
-const AutoCompleteFlyout = ({ searchResults }) => {
-  // console.log(searchResults);
+const AutoCompleteFlyout = ({ searchResults, toggleShowSearchResults }) => {
+  const { selectedSymbols, addSelectedSymbol } = useContext(AppContext);
+  const handleSelectSymbol = (symbol) => {
+    // console.log(symbol);
+    if (selectedSymbols.find(({ id }) => id === symbol.id)) {
+      return alert('This symbol has already been selected');
+    }
+    addSelectedSymbol(symbol);
+    return toggleShowSearchResults();
+  };
+  const handleKeyDown = (e, symbol) => {
+    if (e.key === 'Enter') {
+      return handleSelectSymbol(symbol);
+    }
+  };
   return (
     <div className="search-results__container">
       {searchResults.length ? (
-        <ul>
-          {searchResults.map(({ symbol, title, id }) => (
-            <li key={id}>
-              <h4>{symbol}</h4>
-              <h5>{title}</h5>
-            </li>
+        <>
+          <button type="button" onClick={toggleShowSearchResults}>
+            Close
+          </button>
+          {searchResults.map((symbolObj) => (
+            <div
+              className="results__list-item"
+              key={symbolObj.id}
+              onClick={() => handleSelectSymbol(symbolObj)}
+              onKeyDown={(e) => handleKeyDown(e, symbolObj)}
+              role="presentation"
+            >
+              <h4 className="results__list-item--title">{symbolObj.symbol}</h4>
+              <h5 className="results__list-item--subtitle">
+                {symbolObj.title}
+              </h5>
+            </div>
           ))}
-        </ul>
+        </>
       ) : (
         <div>No matching results found</div>
       )}
@@ -31,6 +57,7 @@ AutoCompleteFlyout.propTypes = {
       type: string.isRequired,
     }).isRequired
   ),
+  toggleShowSearchResults: func.isRequired,
 };
 
 AutoCompleteFlyout.defaultProps = {
