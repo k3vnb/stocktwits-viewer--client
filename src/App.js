@@ -3,11 +3,13 @@ import socketIOClient from 'socket.io-client';
 import AppContext from './AppContext';
 import ChipContainer from './components/ChipContainer/ChipContainer';
 import SearchBar from './components/SearchBar/SearchBar';
+import TweetContainer from './components/TweetContainer/TweetContainer';
 
 const ENDPOINT = 'http://localhost:8000?params=';
 
 function App() {
   const [response, setResponse] = useState('');
+  const [tweetStream, setTweetStream] = useState([]);
   const [selectedSymbols, setSelectedSymbols] = useState([
     {
       exchange: 'NYSE',
@@ -16,16 +18,24 @@ function App() {
       title: 'Catalent',
       type: 'symbol',
     },
+    {
+      exchange: 'NASDAQ',
+      id: 828,
+      symbol: 'AMCC',
+      title: 'Applied Micro Circuits Corp.',
+      type: 'symbol',
+    },
   ]);
 
   useEffect(() => {
-    if (selectedSymbols.length) {
-      const queryString = selectedSymbols.map(({ symbol }) => symbol).join(',');
+    const queryString = selectedSymbols.map(({ symbol }) => symbol).join(',');
+    if (selectedSymbols.length > 1) {
       const socket = socketIOClient(`${ENDPOINT}/${queryString}`);
       socket.on('FromAPI', (data) => {
         setResponse(data);
       });
       console.log(response);
+      setTweetStream(response || []);
     }
   }, [response, selectedSymbols]);
 
@@ -36,6 +46,7 @@ function App() {
 
   const contextVal = {
     selectedSymbols,
+    tweetStream,
     addSelectedSymbol,
     removeSelectedSymbol,
   };
@@ -49,6 +60,7 @@ function App() {
         <main>
           <ChipContainer />
           <SearchBar />
+          <TweetContainer />
         </main>
       </div>
     </AppContext.Provider>
