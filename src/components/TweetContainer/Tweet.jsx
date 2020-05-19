@@ -1,12 +1,14 @@
 /* eslint-disable camelcase */
 import React from 'react';
 import { shape, string } from 'prop-types';
+import Moment from 'react-moment';
 
 const Tweet = ({ tweetProps }) => {
   const {
     body,
     created_at,
-    sentiment,
+    // entitities: { sentiment },
+    likes,
     user: { avatar_url_ssl, username },
   } = tweetProps;
   return (
@@ -17,10 +19,21 @@ const Tweet = ({ tweetProps }) => {
       <div className="tweet__content">
         <div className="tweet__content--user-info">
           <span className="username">{username}</span>
-          <span className="status-chip">{sentiment && sentiment.basic}</span>
+          {/* <span className="status-chip">{sentiment && sentiment.basic}</span> */}
         </div>
         <div className="tweet__content--body">{body}</div>
-        <div className="tweet__content--footer">{created_at}</div>
+        <div className="tweet__content--footer">
+          <Moment fromNow>{created_at}</Moment>
+          {!!likes && (
+            <div className="tweet__content--likes">
+              <img
+                src="https://img.icons8.com/wired/64/000000/thumb-up.png"
+                alt="likes"
+              />
+              {likes.total}
+            </div>
+          )}
+        </div>
       </div>
     </article>
   );

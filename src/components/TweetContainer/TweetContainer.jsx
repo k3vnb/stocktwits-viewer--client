@@ -15,11 +15,13 @@ const TweetContainer = () => {
   const showTweets = tweetStream.length ? (
     tweetStream.map(({ symbol, messages }) => {
       if (selectedSymbolsIds.indexOf(symbol.id) !== -1) {
+        const messageCount = messages.length < 5 ? messages.length : 5;
         return (
-          <div key={symbol.id}>
+          <div key={symbol.id} className="symbol__tweets-container">
             <h4>{symbol.symbol}</h4>
             <h5>{symbol.title}</h5>
-            {messages.map((message) => (
+            <h6>{`Showing ${messageCount} of ${messages.length} Tweets`}</h6>
+            {messages.slice(0, 5).map((message) => (
               <Tweet key={message.id} tweetProps={message} />
             ))}
           </div>
@@ -29,7 +31,6 @@ const TweetContainer = () => {
   ) : (
     <div>You have no tweet data</div>
   );
-  console.log(showTweets);
   return <div className="symbols-tweets__container">{showTweets}</div>;
 };
 

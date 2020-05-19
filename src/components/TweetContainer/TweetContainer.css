@@ -1,4 +1,56 @@
+.symbol__tweets-container {
+  width: 90vw;
+  max-width: 750px;
+  margin: 2% auto;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  padding: 2%;
+  background-color: white;
+}
+.symbol__tweets-container h4,
+h5,
+h6 {
+  margin: 3px;
+}
 .tweet {
   display: flex;
-  border: 0.5px solid grey;
+  border: 0.5px solid rgb(194, 194, 194);
+  width: 100%;
+  word-wrap: break-word;
+  padding: 2% 1%;
+  margin: 1% auto;
+  border-radius: 8px;
+}
+.tweet__avatar-container {
+  width: 15%;
+}
+.tweet__avatar-container img {
+  border-radius: 50%;
+}
+.tweet__content {
+  width: 85%;
+  padding: 1% 2% 1% 3%;
+}
+.username {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+.tweet__content--footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 5px;
+  font-size: 0.8rem;
+  padding: 2px 5px 0 0;
+  font-family: Arial, sans-serif;
+}
+.tweet__content--likes {
+  display: flex;
+  align-items: center;
+}
+.tweet__content--likes img {
+  height: 16px;
+  width: auto;
+  margin: 0 2px 4px 0;
 }
