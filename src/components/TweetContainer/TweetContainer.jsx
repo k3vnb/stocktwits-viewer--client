@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import { Link } from 'react-router-dom';
 import AppContext from '../../AppContext';
 import Tweet from './Tweet';
 import './TweetContainer.css';
@@ -20,7 +21,10 @@ const TweetContainer = () => {
           <div key={symbol.id} className="symbol__tweets-container">
             <h4>{symbol.symbol}</h4>
             <h5>{symbol.title}</h5>
-            <h6>{`Showing ${messageCount} of ${messages.length} Tweets`}</h6>
+            <h6>
+              <span className="tweet-count">{`Showing ${messageCount} of ${messages.length} Tweets `}</span>
+              <Link to={`/symbol/${symbol.id}`}>See All</Link>
+            </h6>
             {messages.slice(0, 5).map((message) => (
               <Tweet key={message.id} tweetProps={message} />
             ))}

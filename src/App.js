@@ -1,16 +1,20 @@
 import React, { useState, useEffect } from 'react';
+import { Switch, Route } from 'react-router-dom';
 import socketIOClient from 'socket.io-client';
 import AppContext from './AppContext';
 import ChipContainer from './components/ChipContainer/ChipContainer';
 import SearchBar from './components/SearchBar/SearchBar';
 import TweetContainer from './components/TweetContainer/TweetContainer';
+import TweetPage from './components/TweetContainer/TweetPage';
+import { testStream, testSelectedSymbols } from './dummyStore';
+import './App.css';
 
 const ENDPOINT = 'http://localhost:8000?params=';
 
 const App = () => {
   const [response, setResponse] = useState('');
-  const [tweetStream, setTweetStream] = useState([]);
-  const [selectedSymbols, setSelectedSymbols] = useState([]);
+  const [tweetStream, setTweetStream] = useState(testStream);
+  const [selectedSymbols, setSelectedSymbols] = useState(testSelectedSymbols);
 
   useEffect(() => {
     const queryString = selectedSymbols.map(({ symbol }) => symbol).join(',');
@@ -19,7 +23,7 @@ const App = () => {
       socket.on('FromAPI', (data) => {
         setResponse(data);
       });
-      setTweetStream(response || []);
+      setTweetStream(response || testStream || []);
     }
   }, [response, selectedSymbols]);
 
@@ -37,6 +41,7 @@ const App = () => {
       .catch((err) => console.error(err));
     return setTweetStream([...tweetStream, newStream]);
   };
+
   const removeSelectedSymbol = (symbolId) =>
     setSelectedSymbols(selectedSymbols.filter(({ id }) => id !== symbolId));
 
@@ -47,6 +52,14 @@ const App = () => {
     removeSelectedSymbol,
   };
 
+  const LandingPage = () => (
+    <>
+      <ChipContainer />
+      <SearchBar />
+      <TweetContainer />
+    </>
+  );
+
   return (
     <AppContext.Provider value={contextVal}>
       <div className="app">
@@ -54,9 +67,10 @@ const App = () => {
           <h1>Stocktwits</h1>
         </header>
         <main>
-          <ChipContainer />
-          <SearchBar />
-          <TweetContainer />
+          <Switch>
+            <Route exact path="/" component={LandingPage} />
+            <Route path="/symbol/:symbolId" component={TweetPage} />
+          </Switch>
         </main>
       </div>
     </AppContext.Provider>

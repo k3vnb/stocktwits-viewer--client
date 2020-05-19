@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useContext } from 'react';
+import { useHistory } from 'react-router-dom';
 import Chip from '@material-ui/core/Chip';
 import AppContext from '../../AppContext';
 
 const ChipContainer = () => {
+  const { push } = useHistory();
   const { selectedSymbols, removeSelectedSymbol } = useContext(AppContext);
   const [alphabetizedSymbols, setAlphabetizedSymbols] = useState([]);
   useEffect(() => {
@@ -14,8 +16,8 @@ const ChipContainer = () => {
   }, [selectedSymbols]);
   const handleDelete = (id) => removeSelectedSymbol(id);
 
-  const handleClick = () => {
-    console.info('You clicked the Chip.');
+  const handleClick = (id) => {
+    push(`/symbol/${id}`);
   };
   return (
     <section className="chip-container">
@@ -32,7 +34,7 @@ const ChipContainer = () => {
             label={symbol}
             clickable
             color="primary"
-            onClick={handleClick}
+            onClick={() => handleClick(id)}
             onDelete={() => handleDelete(id)}
           />
         ))}
