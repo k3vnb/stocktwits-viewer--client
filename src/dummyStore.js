@@ -61,3 +61,20 @@ export const testStream = [
     symbol: { id: 12144, symbol: 'CTLT', title: 'Catalent' },
   },
 ];
+
+export const testSelectedSymbols = [
+  {
+    exchange: 'NYSE',
+    id: 12144,
+    symbol: 'CTLT',
+    title: 'Catalent',
+    type: 'symbol',
+  },
+  {
+    exchange: 'NASDAQ',
+    id: 828,
+    symbol: 'AMCC',
+    title: 'Applied Micro Circuits Corp.',
+    type: 'symbol',
+  },
+];

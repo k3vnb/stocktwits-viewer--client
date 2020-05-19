@@ -7,25 +7,10 @@ import TweetContainer from './components/TweetContainer/TweetContainer';
 
 const ENDPOINT = 'http://localhost:8000?params=';
 
-function App() {
+const App = () => {
   const [response, setResponse] = useState('');
   const [tweetStream, setTweetStream] = useState([]);
-  const [selectedSymbols, setSelectedSymbols] = useState([
-    {
-      exchange: 'NYSE',
-      id: 12144,
-      symbol: 'CTLT',
-      title: 'Catalent',
-      type: 'symbol',
-    },
-    {
-      exchange: 'NASDAQ',
-      id: 828,
-      symbol: 'AMCC',
-      title: 'Applied Micro Circuits Corp.',
-      type: 'symbol',
-    },
-  ]);
+  const [selectedSymbols, setSelectedSymbols] = useState([]);
 
   useEffect(() => {
     const queryString = selectedSymbols.map(({ symbol }) => symbol).join(',');
@@ -34,13 +19,24 @@ function App() {
       socket.on('FromAPI', (data) => {
         setResponse(data);
       });
-      console.log(response);
       setTweetStream(response || []);
     }
   }, [response, selectedSymbols]);
 
-  const addSelectedSymbol = (newSymbol) =>
+  const addSelectedSymbol = async (newSymbol) => {
     setSelectedSymbols([...selectedSymbols, newSymbol]);
+    const newStream = await fetch(
+      `http://localhost:8001/api/add/${newSymbol.symbol}`
+    )
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        }
+        throw new Error('Could not fetch data');
+      })
+      .catch((err) => console.error(err));
+    return setTweetStream([...tweetStream, newStream]);
+  };
   const removeSelectedSymbol = (symbolId) =>
     setSelectedSymbols(selectedSymbols.filter(({ id }) => id !== symbolId));
 
@@ -65,6 +61,6 @@ function App() {
       </div>
     </AppContext.Provider>
   );
-}
+};
 
 export default App;

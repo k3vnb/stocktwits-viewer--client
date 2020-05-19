@@ -20,7 +20,7 @@ const SearchBar = () => {
     // character length is set to mitigate exceeding rate limit
     if (searchTerm.length > 2 && searchTerm.length < 5) {
       const searchResultsList = await fetch(
-        `http://localhost:8001/api/${e.target.value}`
+        `http://localhost:8001/api/search/${e.target.value}`
       )
         .then((res) => {
           if (res.ok) {
