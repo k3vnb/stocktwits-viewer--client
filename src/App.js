@@ -6,15 +6,15 @@ import ChipContainer from './components/ChipContainer/ChipContainer';
 import SearchBar from './components/SearchBar/SearchBar';
 import TweetContainer from './components/TweetContainer/TweetContainer';
 import TweetPage from './components/TweetContainer/TweetPage';
-import { testStream, testSelectedSymbols } from './dummyStore';
+// import { testStream, testSelectedSymbols } from './dummyStore';
 import './App.css';
 
 const ENDPOINT = 'http://localhost:8000?params=';
 
 const App = () => {
   const [response, setResponse] = useState('');
-  const [tweetStream, setTweetStream] = useState(testStream);
-  const [selectedSymbols, setSelectedSymbols] = useState(testSelectedSymbols);
+  const [tweetStream, setTweetStream] = useState([]);
+  const [selectedSymbols, setSelectedSymbols] = useState([]);
 
   useEffect(() => {
     const queryString = selectedSymbols.map(({ symbol }) => symbol).join(',');
@@ -23,7 +23,7 @@ const App = () => {
       socket.on('FromAPI', (data) => {
         setResponse(data);
       });
-      setTweetStream(response || testStream || []);
+      setTweetStream(response || [...tweetStream] || []);
     }
   }, [response, selectedSymbols]);
 
@@ -42,8 +42,16 @@ const App = () => {
     return setTweetStream([...tweetStream, newStream]);
   };
 
-  const removeSelectedSymbol = (symbolId) =>
-    setSelectedSymbols(selectedSymbols.filter(({ id }) => id !== symbolId));
+  const removeSelectedSymbol = (symbolId) => {
+    const updatedSelectedSymbols = selectedSymbols.filter(
+      ({ id }) => id !== symbolId
+    );
+    const updatedTweetStream = tweetStream.filter(
+      ({ symbol }) => symbol.id !== symbolId
+    );
+    setSelectedSymbols(updatedSelectedSymbols);
+    setTweetStream(updatedTweetStream);
+  };
 
   const contextVal = {
     selectedSymbols,
@@ -55,7 +63,6 @@ const App = () => {
   const LandingPage = () => (
     <>
       <ChipContainer />
-      <SearchBar />
       <TweetContainer />
     </>
   );
@@ -64,7 +71,8 @@ const App = () => {
     <AppContext.Provider value={contextVal}>
       <div className="app">
         <header>
-          <h1>Stocktwits</h1>
+          <h1>Stocktwit Viewer</h1>
+          <SearchBar />
         </header>
         <main>
           <Switch>

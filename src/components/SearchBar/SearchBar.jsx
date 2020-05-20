@@ -1,14 +1,39 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
 import { TextField } from '@material-ui/core';
 import SearchResultsFlyout from '../SearchResultsFlyout/SearchResultsFlyout';
+import './SearchBar.css';
 
 const SearchBar = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [showSearchResults, setShowSearchResults] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
-  const toggleShowSearchResults = () =>
-    setShowSearchResults(!showSearchResults);
-  const clearSearchTerm = () => setSearchTerm('');
+  const [searchResultPosition, setSearchResultPosition] = useState({
+    top: 0,
+    width: 0,
+  });
+  const searchInputRef = useRef(null);
+
+  useEffect(() => {
+    if (searchInputRef.current) {
+      setSearchResultPosition({
+        top: searchInputRef.current.getBoundingClientRect().bottom,
+        width: searchInputRef.current.getBoundingClientRect().width,
+      });
+    }
+  }, [searchInputRef]);
+
+  useLayoutEffect(() => {
+    function updatePosition() {
+      setSearchResultPosition({
+        top: searchInputRef.current.getBoundingClientRect().bottom,
+        width: searchInputRef.current.getBoundingClientRect().width,
+      });
+    }
+    window.addEventListener('resize', updatePosition);
+    updatePosition();
+    return () => window.removeEventListener('resize', updatePosition);
+  }, []);
+
   useEffect(() => {
     if (searchTerm.length > 1) {
       return setShowSearchResults(true);
@@ -34,9 +59,16 @@ const SearchBar = () => {
       }
     }
   };
+
+  const toggleShowSearchResults = () =>
+    setShowSearchResults(!showSearchResults);
+
+  const clearSearchTerm = () => setSearchTerm('');
+
   return (
-    <>
+    <div className="search-bar__container">
       <TextField
+        inputRef={searchInputRef}
         value={searchTerm}
         fullWidth
         label="Search Stock Symbols"
@@ -47,12 +79,13 @@ const SearchBar = () => {
       />
       {showSearchResults && (
         <SearchResultsFlyout
+          position={searchResultPosition}
           searchResults={searchResults}
           toggleShowSearchResults={toggleShowSearchResults}
           clearSearchTerm={clearSearchTerm}
         />
       )}
-    </>
+    </div>
   );
 };
 

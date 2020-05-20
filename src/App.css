@@ -1,5 +1,32 @@
 main {
   padding: 15px;
   background-color: rgb(241, 241, 241);
+  background-color: #efefef;
   min-height: 100vh;
+  margin-top: 60px;
+}
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.2% 3%;
+  width: 100%;
+  background-color: white;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 500;
+  background-color: #4bd696;
+  border-bottom: 1.5px solid #7ac47a;
+}
+header h1 {
+  text-shadow: 1px 1px 1px #ffffff99, -1px -1px 1px rgba(22, 132, 22, 0.61);
+}
+header > * {
+  width: 50%;
+}
+@media screen and (max-width: 400px) {
+  header h1 {
+    font-size: 1rem;
+  }
 }

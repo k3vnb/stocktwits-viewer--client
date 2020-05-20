@@ -1,6 +1,6 @@
 .symbol__tweets-container {
   width: 90vw;
-  max-width: 750px;
+  max-width: 500px;
   margin: 2% auto;
   border-radius: 12px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
@@ -14,6 +14,7 @@ h6 {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 .symbol__tweets-container h6 {
+  font-size: 0.85rem;
   font-weight: lighter;
   text-align: right;
 }
@@ -31,9 +32,21 @@ h6 {
 }
 .tweet__avatar-container {
   width: 15%;
+  max-width: 60px;
+  display: flex;
+  justify-content: center;
 }
 .tweet__avatar-container img {
   border-radius: 50%;
+  max-height: 50px;
+  max-width: 50px;
+}
+@media screen and (max-width: 380px) {
+  .tweet__avatar-container img {
+    width: 35px;
+    height: 35px;
+    object-fit: cover;
+  }
 }
 .tweet__content {
   width: 85%;
@@ -61,4 +74,23 @@ h6 {
   height: 16px;
   width: auto;
   margin: 0 2px 4px 0;
+}
+.tweet-page {
+  margin-top: 50px;
+}
+.go-back-btn {
+  color: white !important;
+  background-color: lightseagreen !important;
+}
+@media screen and (min-width: 1250px) {
+  .tweets__container--outer {
+    display: flex;
+    justify-content: row-reverse;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    /* background-color: black;  */
+  }
+  .symbol__tweets-container:nth-child(odd) {
+    margin-left: 5%;
+  }
 }

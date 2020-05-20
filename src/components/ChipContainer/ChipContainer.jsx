@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import Chip from '@material-ui/core/Chip';
 import AppContext from '../../AppContext';
+import './ChipContainer.css';
 
 const ChipContainer = () => {
   const { push } = useHistory();
@@ -21,14 +22,15 @@ const ChipContainer = () => {
   };
   return (
     <section className="chip-container">
-      <h3 className="chip-container__title">Your Symbols:</h3>
-      <p>
-        Click the symbol name to go to the symbol page or click delete icon to
-        remove it from the list
-      </p>
+      <h3 className="chip-container__title">
+        Your
+        <br />
+        Symbols:
+      </h3>
       <div className="chip-container__chips">
         {alphabetizedSymbols.map(({ id, symbol, title }) => (
           <Chip
+            className="chip"
             title={title}
             key={id}
             label={symbol}
@@ -38,8 +40,10 @@ const ChipContainer = () => {
             onDelete={() => handleDelete(id)}
           />
         ))}
+        {!selectedSymbols.length && (
+          <div className="empty-message">You have not selected any symbols</div>
+        )}
       </div>
-      {!selectedSymbols.length && <div>You have not selected any symbols</div>}
     </section>
   );
 };

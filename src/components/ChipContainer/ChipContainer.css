@@ -1,0 +1,31 @@
+.chip-container {
+  display: flex;
+  align-items: center;
+}
+@media screen and (min-width: 500px) {
+  .chip-container {
+    padding: 0 10%;
+  }
+}
+.chip-container__title {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 0.95rem;
+  margin-right: 10px;
+}
+.chip-container__chips {
+  min-height: 120px;
+  padding: 4%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  flex-grow: 1;
+}
+.chip-container__chips > div {
+  margin: 2px;
+}
+.empty-message {
+  text-align: center;
+  align-self: center;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande',
+    'Lucida Sans', Arial, sans-serif;
+}

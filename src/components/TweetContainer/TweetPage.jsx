@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { Button } from '@material-ui/core';
 import { useHistory, useParams } from 'react-router-dom';
 import AppContext from '../../AppContext';
+import ChipContainer from '../ChipContainer/ChipContainer';
 import Tweet from './Tweet';
 
 const TweetPage = () => {
@@ -16,10 +17,11 @@ const TweetPage = () => {
   };
 
   return (
-    <section>
+    <section className="tweet-page">
       <Button onClick={goBack} variant="contained" className="go-back-btn">
         Go Back
       </Button>
+      <ChipContainer />
       {checkSymbolId() &&
         tweetStream.map(({ symbol, messages }) => {
           if (symbol.id === symbolIdToNumber) {
@@ -27,7 +29,6 @@ const TweetPage = () => {
             return (
               <div key={symbol.id} className="symbol__tweets-container">
                 <h4>{`${symbol.symbol} - ${symbol.title}`}</h4>
-                <h5></h5>
                 <h6>{`Showing ${messageCount} of ${messages.length} Tweets`}</h6>
                 {messages.map((message) => (
                   <Tweet key={message.id} tweetProps={message} />

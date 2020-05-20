@@ -1,10 +1,12 @@
 import React, { useContext } from 'react';
 import { shape, string, arrayOf, number, func } from 'prop-types';
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import AppContext from '../../AppContext';
 import './SearchResultsFlyout.css';
 
 const AutoCompleteFlyout = ({
   searchResults,
+  position: { top, width },
   toggleShowSearchResults,
   clearSearchTerm,
 }) => {
@@ -24,12 +26,12 @@ const AutoCompleteFlyout = ({
     }
   };
   return (
-    <div className="search-results__container">
+    <ClickAwayListener onClickAway={toggleShowSearchResults}>
       {searchResults.length ? (
-        <>
-          <button type="button" onClick={toggleShowSearchResults}>
+        <div className="search-results__container" style={{ top, width }}>
+          {/* <button type="button" onClick={toggleShowSearchResults}>
             Close
-          </button>
+          </button> */}
           {searchResults.map((symbolObj) => (
             <div
               className="results__list-item"
@@ -44,11 +46,13 @@ const AutoCompleteFlyout = ({
               </h5>
             </div>
           ))}
-        </>
+        </div>
       ) : (
-        <div>No matching results found</div>
+        <div className="search-results__container" style={{ top, width }}>
+          No matching results found
+        </div>
       )}
-    </div>
+    </ClickAwayListener>
   );
 };
 
@@ -62,6 +66,10 @@ AutoCompleteFlyout.propTypes = {
       type: string.isRequired,
     }).isRequired
   ),
+  position: shape({
+    top: number.isRequired,
+    width: number.isRequired,
+  }).isRequired,
   toggleShowSearchResults: func.isRequired,
   clearSearchTerm: func.isRequired,
 };
