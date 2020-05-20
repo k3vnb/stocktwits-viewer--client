@@ -6,6 +6,7 @@ import React, {
   useContext,
 } from 'react';
 import { TextField } from '@material-ui/core';
+import config from '../../config';
 import AppContext from '../../AppContext';
 import SearchResultsFlyout from '../SearchResultsFlyout/SearchResultsFlyout';
 import './SearchBar.css';
@@ -49,25 +50,21 @@ const SearchBar = () => {
     return setShowSearchResults(false);
   }, [searchTerm]);
 
-  const setNewSearchString = async (e) => {
+  const setNewSearchString = (e) => {
     setSearchTerm(e.target.value);
     // character length is set to mitigate exceeding rate limit
-    if (searchTerm.length > 1 && searchTerm.length < 12) {
-      const searchResultsList = await fetch(
-        `http://localhost:8001/api/search/${e.target.value}`
-      )
+    if (searchTerm.length && searchTerm.length < 12) {
+      fetch(`${config.API_ENDPOINT}/search/${e.target.value}`)
         .then((res) => {
           if (res.ok) {
             return res.json();
           }
           throw new Error('Could not fetch data');
         })
+        .then(({ results }) => setSearchResults(results))
         .catch((err) => {
           setError(`Oops. ${err.message}`);
         });
-      if (searchResultsList) {
-        setSearchResults(searchResultsList.results);
-      }
     }
   };
 

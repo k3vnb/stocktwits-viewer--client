@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Switch, Route } from 'react-router-dom';
+import config from './config';
 import useInterval from './hooks/useInterval';
 import AppContext from './AppContext';
 import ChipContainer from './components/ChipContainer/ChipContainer';
@@ -22,7 +23,7 @@ const App = () => {
       setLoading(true);
       const queryString = selectedSymbols.map(({ symbol }) => symbol).join('+');
       const getUpdatedStream = async () =>
-        fetch(`http://localhost:8001/api/symbols/${queryString}`);
+        fetch(`${config.API_ENDPOINT}/symbols/${queryString}`);
 
       getUpdatedStream()
         .then((res) => {
@@ -54,7 +55,7 @@ const App = () => {
   const addSelectedSymbol = async (newSymbol) => {
     setLoading(true);
     setSelectedSymbols([...selectedSymbols, newSymbol]);
-    fetch(`http://localhost:8001/api/add/${newSymbol.symbol}`)
+    fetch(`${config.API_ENDPOINT}/add/${newSymbol.symbol}`)
       .then((res) => {
         if (res.ok) {
           return res.json();
