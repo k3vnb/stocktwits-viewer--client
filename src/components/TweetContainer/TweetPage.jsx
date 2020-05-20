@@ -15,6 +15,10 @@ const TweetPage = () => {
     const validIds = tweetStream.map(({ symbol }) => symbol.id);
     return validIds.some((id) => id === symbolIdToNumber);
   };
+  const currentTweetStream = tweetStream.length
+    ? tweetStream.find(({ symbol }) => symbol.id === symbolIdToNumber)
+    : {};
+  console.log(currentTweetStream);
 
   return (
     <section className="tweet-page">
@@ -22,22 +26,21 @@ const TweetPage = () => {
         Go Back
       </Button>
       <ChipContainer />
-      {checkSymbolId() &&
-        tweetStream.map(({ symbol, messages }) => {
-          if (symbol.id === symbolIdToNumber) {
-            const messageCount = messages.length;
-            return (
-              <div key={symbol.id} className="symbol__tweets-container">
-                <h4>{`${symbol.symbol} - ${symbol.title}`}</h4>
-                <h6>{`Showing ${messageCount} of ${messages.length} Tweets`}</h6>
-                {messages.map((message) => (
-                  <Tweet key={message.id} tweetProps={message} />
-                ))}
-              </div>
-            );
-          }
-        })}
-      {!checkSymbolId() && <div>Cannot find data for this stock symbol</div>}
+      {checkSymbolId() && currentTweetStream.symbol && (
+        <div className="symbol__tweets-container">
+          <h4>{`${currentTweetStream.symbol.symbol} - ${currentTweetStream.symbol.title}`}</h4>
+          <h6>{`Showing ${currentTweetStream.messages.length} of ${currentTweetStream.messages.length} Tweets`}</h6>
+          {currentTweetStream.messages.map((message) => (
+            <Tweet key={message.id} tweetProps={message} />
+          ))}
+        </div>
+      )}
+      {!checkSymbolId() && (
+        <div style={{ textAlign: 'center' }}>
+          Cannot find data for this stock symbol. Click &apos;Go Back&apos; and
+          try again.
+        </div>
+      )}
     </section>
   );
 };

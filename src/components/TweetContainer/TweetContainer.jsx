@@ -1,11 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import AppContext from '../../AppContext';
+import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 import Tweet from './Tweet';
 import './TweetContainer.css';
 
 const TweetContainer = () => {
-  const { selectedSymbols, tweetStream } = useContext(AppContext);
+  const { selectedSymbols, tweetStream, loading } = useContext(AppContext);
   const [currentSelectedSymbols, setCurrentSelectedSymbols] = useState([]);
   /*
     Due to a delay in the web socket retrieval of new data,
@@ -16,25 +17,29 @@ const TweetContainer = () => {
     const selectedSymbolsIds = selectedSymbols.map(({ id }) => id);
     setCurrentSelectedSymbols(selectedSymbolsIds);
   }, [selectedSymbols]);
-  const showTweets = tweetStream.length ? (
+
+  const currentTweetStream = tweetStream.filter(
+    ({ symbol }) => currentSelectedSymbols.indexOf(symbol.id) !== -1
+  );
+
+  const showTweets = currentTweetStream.length ? (
     <div className="tweets__container--outer">
-      {tweetStream.map(({ symbol, messages }) => {
-        if (currentSelectedSymbols.indexOf(symbol.id) !== -1) {
-          const messageCount = messages.length < 5 ? messages.length : 5;
-          return (
-            <div key={symbol.id} className="symbol__tweets-container">
-              <h4>{symbol.symbol}</h4>
-              <h5>{symbol.title}</h5>
-              <h6>
-                <span className="tweet-count">{`Showing ${messageCount} of ${messages.length} Tweets `}</span>
-                <Link to={`/symbol/${symbol.id}`}>See All</Link>
-              </h6>
-              {messages.slice(0, 5).map((message) => (
-                <Tweet key={message.id} tweetProps={message} />
-              ))}
-            </div>
-          );
-        }
+      {currentTweetStream.map(({ symbol, messages }) => {
+        const messageCount = messages.length < 5 ? messages.length : 5;
+        return (
+          <div key={symbol.id} className="symbol__tweets-container">
+            <h4>{symbol.symbol}</h4>
+            <h5>{symbol.title}</h5>
+            <h6>
+              <span className="tweet-count">{`Showing ${messageCount} of ${messages.length} Tweets `}</span>
+              <Link to={`/symbol/${symbol.id}`}>See All</Link>
+            </h6>
+            {messages.slice(0, 5).map((message) => (
+              <Tweet key={message.id} tweetProps={message} />
+            ))}
+            {loading && <LoadingSpinner />}
+          </div>
+        );
       })}
     </div>
   ) : (
