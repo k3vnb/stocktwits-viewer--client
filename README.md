@@ -1,6 +1,7 @@
 # Stocktwits React Interface
 
-Simple interface for interacting with Stocktwits API in realtime
+Simple interface for interacting with Stocktwits API
+Hosted at https://stocktwits-viewer.now.sh/
 
 ## Stack
 
