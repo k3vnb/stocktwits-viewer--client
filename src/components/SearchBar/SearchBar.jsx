@@ -62,14 +62,6 @@ const SearchBar = () => {
           }
           throw new Error('Could not fetch data');
         })
-        .then((res) => {
-          if (res.response.status === 429) {
-            throw new Error(
-              'We have exceeded our Stockwits API rate limit for the hour. Check back later'
-            );
-          }
-          return res;
-        })
         .catch((err) => {
           setError(`Oops. ${err.message}`);
         });

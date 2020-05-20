@@ -8,6 +8,7 @@
 }
 .empty-page__text {
   margin: 5% 0;
+  text-align: center;
 }
 .empty-page__subtext {
   font-size: 6px;

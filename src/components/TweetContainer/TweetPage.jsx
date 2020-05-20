@@ -2,9 +2,9 @@ import React, { useContext } from 'react';
 import { Button } from '@material-ui/core';
 import { useHistory, useParams } from 'react-router-dom';
 import AppContext from '../../AppContext';
-import ChipContainer from '../ChipContainer/ChipContainer';
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 import Tweet from './Tweet';
+import './TweetContainer.css';
 
 const TweetPage = () => {
   const { goBack } = useHistory();
@@ -25,15 +25,19 @@ const TweetPage = () => {
       <Button onClick={goBack} variant="contained" className="go-back-btn">
         Go Back
       </Button>
-      <ChipContainer />
       {checkSymbolId() && currentTweetStream.symbol && (
-        <div className="symbol__tweets-container">
-          <h4>{`${currentTweetStream.symbol.symbol} - ${currentTweetStream.symbol.title}`}</h4>
-          <h6>{`Showing ${currentTweetStream.messages.length} of ${currentTweetStream.messages.length} Tweets`}</h6>
-          {currentTweetStream.messages.map((message) => (
-            <Tweet key={message.id} tweetProps={message} />
-          ))}
-        </div>
+        <>
+          <h3 className="tweet-page__page-title">
+            {`${currentTweetStream.symbol.title} Tweets Page`}
+          </h3>
+          <div className="symbol__tweets-container">
+            <h4>{`${currentTweetStream.symbol.symbol} - ${currentTweetStream.symbol.title}`}</h4>
+            <h6>{`Showing ${currentTweetStream.messages.length} of ${currentTweetStream.messages.length} Tweets`}</h6>
+            {currentTweetStream.messages.map((message) => (
+              <Tweet key={message.id} tweetProps={message} />
+            ))}
+          </div>
+        </>
       )}
       {!checkSymbolId() && (
         <div style={{ textAlign: 'center' }}>

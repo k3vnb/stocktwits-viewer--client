@@ -33,7 +33,12 @@ const App = () => {
         })
         .then((stream) => {
           setLoading(false);
-          return setTweetStream(stream || [...tweetStream]);
+          let verifyStream = stream;
+          if (stream.response && stream.response.status !== 200) {
+            verifyStream = tweetStream;
+          }
+          setError('');
+          return setTweetStream(verifyStream);
         })
         .catch((err) => {
           setLoading(false);
@@ -49,18 +54,21 @@ const App = () => {
   const addSelectedSymbol = async (newSymbol) => {
     setLoading(true);
     setSelectedSymbols([...selectedSymbols, newSymbol]);
-    const newStream = await fetch(
-      `http://localhost:8001/api/add/${newSymbol.symbol}`
-    )
+    fetch(`http://localhost:8001/api/add/${newSymbol.symbol}`)
       .then((res) => {
         if (res.ok) {
           return res.json();
         }
         throw new Error('Could not fetch data');
       })
-      .catch((err) => console.error(err));
-    setLoading(false);
-    return setTweetStream([...tweetStream, newStream]);
+      .then((newStream) => {
+        setTweetStream([...tweetStream, newStream]);
+        setLoading(false);
+      })
+      .catch((err) => {
+        setLoading(false);
+        setError(`Oops. ${err.message}`);
+      });
   };
 
   const removeSelectedSymbol = (symbolId) => {
@@ -92,7 +100,7 @@ const App = () => {
         <EmptyPage
           message={
             error ||
-            'Select a stock from the searchbar to start watching stock tweets'
+            'Select a stock from the searchbar to start watching stock tweets.'
           }
         />
       )}
@@ -111,6 +119,11 @@ const App = () => {
           <Switch>
             <Route exact path="/" component={LandingPage} />
             <Route path="/symbol/:symbolId" component={TweetPage} />
+            <Route
+              render={() => (
+                <EmptyPage message="Error 404. Cannot find this page." />
+              )}
+            />
           </Switch>
         </main>
       </div>
