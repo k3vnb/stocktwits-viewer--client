@@ -1,9 +1,17 @@
-import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useContext,
+} from 'react';
 import { TextField } from '@material-ui/core';
+import AppContext from '../../AppContext';
 import SearchResultsFlyout from '../SearchResultsFlyout/SearchResultsFlyout';
 import './SearchBar.css';
 
 const SearchBar = () => {
+  const { setError } = useContext(AppContext);
   const [searchTerm, setSearchTerm] = useState('');
   const [showSearchResults, setShowSearchResults] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
@@ -52,6 +60,15 @@ const SearchBar = () => {
             return res.json();
           }
           throw new Error('Could not fetch data');
+        })
+        .then((res) => {
+          if (res.response.status === 429) {
+            setError(
+              'Oops. We have exceeded our Stockwits API rate limit. Check back later'
+            );
+            throw new Error('Rate Limit exceeded');
+          }
+          return res;
         })
         .catch((err) => console.error(err));
       if (searchResultsList) {

@@ -6,24 +6,34 @@ import ChipContainer from './components/ChipContainer/ChipContainer';
 import SearchBar from './components/SearchBar/SearchBar';
 import TweetContainer from './components/TweetContainer/TweetContainer';
 import TweetPage from './components/TweetContainer/TweetPage';
-// import { testStream, testSelectedSymbols } from './dummyStore';
+import LoadingSpinner from './components/LoadingSpinner/LoadingSpinner';
+import ErrorPage from './components/ErrorPage/ErrorPage';
 import './App.css';
+import EmptyPage from './components/EmptyPage/EmptyPage';
 
 const ENDPOINT = 'http://localhost:8000?params=';
 
 const App = () => {
   const [response, setResponse] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
   const [tweetStream, setTweetStream] = useState([]);
   const [selectedSymbols, setSelectedSymbols] = useState([]);
 
   useEffect(() => {
     const queryString = selectedSymbols.map(({ symbol }) => symbol).join(',');
-    if (selectedSymbols.length > 1) {
+    if (selectedSymbols.length) {
+      setLoading(true);
       const socket = socketIOClient(`${ENDPOINT}/${queryString}`);
       socket.on('FromAPI', (data) => {
+        if (data[0].response.status === 404) {
+          console.error('Could not retrieve data');
+          return setError('Could not retrieve data');
+        }
         setResponse(data);
       });
-      setTweetStream(response || [...tweetStream] || []);
+      setTweetStream(() => response || [...tweetStream] || []);
+      setLoading(false);
     }
   }, [response, selectedSymbols]);
 
@@ -56,6 +66,7 @@ const App = () => {
   const contextVal = {
     selectedSymbols,
     tweetStream,
+    setError,
     addSelectedSymbol,
     removeSelectedSymbol,
   };
@@ -63,7 +74,7 @@ const App = () => {
   const LandingPage = () => (
     <>
       <ChipContainer />
-      <TweetContainer />
+      {tweetStream.length ? <TweetContainer /> : <EmptyPage />}
     </>
   );
 
@@ -79,6 +90,8 @@ const App = () => {
             <Route exact path="/" component={LandingPage} />
             <Route path="/symbol/:symbolId" component={TweetPage} />
           </Switch>
+          {loading && <LoadingSpinner />}
+          {error && <ErrorPage errorMessage={error} />}
         </main>
       </div>
     </AppContext.Provider>
