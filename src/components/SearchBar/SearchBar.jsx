@@ -63,14 +63,15 @@ const SearchBar = () => {
         })
         .then((res) => {
           if (res.response.status === 429) {
-            setError(
-              'Oops. We have exceeded our Stockwits API rate limit. Check back later'
+            throw new Error(
+              'We have exceeded our Stockwits API rate limit for the hour. Check back later'
             );
-            throw new Error('Rate Limit exceeded');
           }
           return res;
         })
-        .catch((err) => console.error(err));
+        .catch((err) => {
+          setError(`Oops. ${err.message}`);
+        });
       if (searchResultsList) {
         setSearchResults(searchResultsList.results);
       }

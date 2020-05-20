@@ -7,7 +7,6 @@ const Tweet = ({ tweetProps }) => {
   const {
     body,
     created_at,
-    // entitities: { sentiment },
     likes,
     user: { avatar_url_ssl, username },
   } = tweetProps;
@@ -19,9 +18,11 @@ const Tweet = ({ tweetProps }) => {
       <div className="tweet__content">
         <div className="tweet__content--user-info">
           <span className="username">{username}</span>
-          {/* <span className="status-chip">{sentiment && sentiment.basic}</span> */}
         </div>
-        <div className="tweet__content--body">{body}</div>
+        <div
+          className="tweet__content--body"
+          dangerouslySetInnerHTML={{ __html: body }}
+        />
         <div className="tweet__content--footer">
           <Moment fromNow>{created_at}</Moment>
           {!!likes && (
@@ -43,7 +44,6 @@ Tweet.propTypes = {
   tweetProps: shape({
     body: string.isRequired,
     created_at: string.isRequired,
-    sentiment: string,
     user: shape({
       avatar_url_ssl: string.isRequired,
       username: string.isRequired,

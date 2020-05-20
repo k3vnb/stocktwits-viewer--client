@@ -12,13 +12,14 @@ import './App.css';
 
 const App = () => {
   const [syncData, setSyncData] = useState(0);
-  // const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [tweetStream, setTweetStream] = useState([]);
   const [selectedSymbols, setSelectedSymbols] = useState([]);
 
   useEffect(() => {
     if (selectedSymbols.length) {
+      setLoading(true);
       const queryString = selectedSymbols.map(({ symbol }) => symbol).join('+');
       const getUpdatedStream = async () =>
         fetch(`http://localhost:8001/api/symbols/${queryString}`);
@@ -32,6 +33,7 @@ const App = () => {
         })
         .then((stream) => setTweetStream(stream || [...tweetStream]))
         .catch((err) => setError(`Oops. ${err.message}`));
+      setLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [syncData]);
@@ -40,6 +42,7 @@ const App = () => {
   useInterval(() => setSyncData(syncData + 1), 60000);
 
   const addSelectedSymbol = async (newSymbol) => {
+    setLoading(true);
     setSelectedSymbols([...selectedSymbols, newSymbol]);
     const newStream = await fetch(
       `http://localhost:8001/api/add/${newSymbol.symbol}`
@@ -51,6 +54,7 @@ const App = () => {
         throw new Error('Could not fetch data');
       })
       .catch((err) => console.error(err));
+    setLoading(false);
     return setTweetStream([...tweetStream, newStream]);
   };
 
@@ -68,6 +72,7 @@ const App = () => {
   const contextVal = {
     selectedSymbols,
     tweetStream,
+    loading,
     setError,
     addSelectedSymbol,
     removeSelectedSymbol,

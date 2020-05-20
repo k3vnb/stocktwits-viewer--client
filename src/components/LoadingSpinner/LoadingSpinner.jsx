@@ -2,8 +2,18 @@ import React from 'react';
 import './LoadingSpinner.css';
 
 const LoadingSpinner = () => (
-  <div className="loading-spinner-container flex-container--centered">
-    <div className="lds-ripple">
+  <div className="loading-spinner-container">
+    <div className="lds-default">
+      <div />
+      <div />
+      <div />
+      <div />
+      <div />
+      <div />
+      <div />
+      <div />
+      <div />
+      <div />
       <div />
       <div />
     </div>

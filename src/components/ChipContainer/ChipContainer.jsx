@@ -15,7 +15,10 @@ const ChipContainer = () => {
     });
     setAlphabetizedSymbols(sortSymbols);
   }, [selectedSymbols]);
-  const handleDelete = (id) => removeSelectedSymbol(id);
+  const handleDelete = (id) => {
+    push('/');
+    return removeSelectedSymbol(id);
+  };
 
   const handleClick = (id) => {
     push(`/symbol/${id}`);

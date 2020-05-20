@@ -9,3 +9,12 @@
 .empty-page__text {
   margin: 5% 0;
 }
+.empty-page__subtext {
+  font-size: 6px;
+  color: grey;
+  margin-left: auto;
+}
+.empty-page__subtext a {
+  color: grey;
+  text-decoration: none;
+}
