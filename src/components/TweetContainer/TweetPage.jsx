@@ -3,13 +3,14 @@ import { Button } from '@material-ui/core';
 import { useHistory, useParams } from 'react-router-dom';
 import AppContext from '../../AppContext';
 import ChipContainer from '../ChipContainer/ChipContainer';
+import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 import Tweet from './Tweet';
 
 const TweetPage = () => {
   const { goBack } = useHistory();
   const { symbolId } = useParams();
   const symbolIdToNumber = Number(symbolId);
-  const { tweetStream } = useContext(AppContext);
+  const { tweetStream, loading } = useContext(AppContext);
   const checkSymbolId = () => {
     if (Number.isNaN(symbolId)) return false;
     const validIds = tweetStream.map(({ symbol }) => symbol.id);
@@ -18,7 +19,6 @@ const TweetPage = () => {
   const currentTweetStream = tweetStream.length
     ? tweetStream.find(({ symbol }) => symbol.id === symbolIdToNumber)
     : {};
-  console.log(currentTweetStream);
 
   return (
     <section className="tweet-page">
@@ -41,6 +41,7 @@ const TweetPage = () => {
           try again.
         </div>
       )}
+      {loading && <LoadingSpinner />}
     </section>
   );
 };

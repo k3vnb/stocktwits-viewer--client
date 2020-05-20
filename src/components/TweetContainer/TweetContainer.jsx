@@ -1,12 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import AppContext from '../../AppContext';
-import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 import Tweet from './Tweet';
 import './TweetContainer.css';
 
 const TweetContainer = () => {
-  const { selectedSymbols, tweetStream, loading } = useContext(AppContext);
+  const { selectedSymbols, tweetStream } = useContext(AppContext);
   const [currentSelectedSymbols, setCurrentSelectedSymbols] = useState([]);
   /*
     Due to a delay in the web socket retrieval of new data,
@@ -37,7 +36,6 @@ const TweetContainer = () => {
             {messages.slice(0, 5).map((message) => (
               <Tweet key={message.id} tweetProps={message} />
             ))}
-            {loading && <LoadingSpinner />}
           </div>
         );
       })}

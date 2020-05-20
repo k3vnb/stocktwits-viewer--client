@@ -6,18 +6,19 @@ import './SearchResultsFlyout.css';
 
 const AutoCompleteFlyout = ({
   searchResults,
+  setSearchResults,
   position: { top, width },
   toggleShowSearchResults,
   clearSearchTerm,
 }) => {
   const { selectedSymbols, addSelectedSymbol } = useContext(AppContext);
   const handleSelectSymbol = (symbol) => {
-    // console.log(symbol);
     if (selectedSymbols.find(({ id }) => id === symbol.id)) {
       return alert('This symbol has already been selected');
     }
     addSelectedSymbol(symbol);
     clearSearchTerm();
+    setSearchResults([]);
     return toggleShowSearchResults();
   };
   const handleKeyDown = (e, symbol) => {
@@ -29,9 +30,6 @@ const AutoCompleteFlyout = ({
     <ClickAwayListener onClickAway={toggleShowSearchResults}>
       {searchResults.length ? (
         <div className="search-results__container" style={{ top, width }}>
-          {/* <button type="button" onClick={toggleShowSearchResults}>
-            Close
-          </button> */}
           {searchResults.map((symbolObj) => (
             <div
               className="results__list-item"
@@ -71,6 +69,7 @@ AutoCompleteFlyout.propTypes = {
     width: number.isRequired,
   }).isRequired,
   toggleShowSearchResults: func.isRequired,
+  setSearchResults: func.isRequired,
   clearSearchTerm: func.isRequired,
 };
 

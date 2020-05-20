@@ -6,7 +6,7 @@ import ChipContainer from './components/ChipContainer/ChipContainer';
 import SearchBar from './components/SearchBar/SearchBar';
 import TweetContainer from './components/TweetContainer/TweetContainer';
 import TweetPage from './components/TweetContainer/TweetPage';
-// import LoadingSpinner from './components/LoadingSpinner/LoadingSpinner';
+import LoadingSpinner from './components/LoadingSpinner/LoadingSpinner';
 import EmptyPage from './components/EmptyPage/EmptyPage';
 import './App.css';
 
@@ -31,9 +31,14 @@ const App = () => {
           }
           throw new Error('Could not fetch data');
         })
-        .then((stream) => setTweetStream(stream || [...tweetStream]))
-        .catch((err) => setError(`Oops. ${err.message}`));
-      setLoading(false);
+        .then((stream) => {
+          setLoading(false);
+          return setTweetStream(stream || [...tweetStream]);
+        })
+        .catch((err) => {
+          setLoading(false);
+          setError(`Oops. ${err.message}`);
+        });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [syncData]);
@@ -91,7 +96,7 @@ const App = () => {
           }
         />
       )}
-      {/* {loading && <LoadingSpinner />} */}
+      {loading && <LoadingSpinner />}
     </>
   );
 

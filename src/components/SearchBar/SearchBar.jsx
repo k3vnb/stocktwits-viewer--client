@@ -48,10 +48,11 @@ const SearchBar = () => {
     }
     return setShowSearchResults(false);
   }, [searchTerm]);
+
   const setNewSearchString = async (e) => {
     setSearchTerm(e.target.value);
     // character length is set to mitigate exceeding rate limit
-    if (searchTerm.length > 2 && searchTerm.length < 5) {
+    if (searchTerm.length > 1 && searchTerm.length < 12) {
       const searchResultsList = await fetch(
         `http://localhost:8001/api/search/${e.target.value}`
       )
@@ -101,6 +102,7 @@ const SearchBar = () => {
           searchResults={searchResults}
           toggleShowSearchResults={toggleShowSearchResults}
           clearSearchTerm={clearSearchTerm}
+          setSearchResults={setSearchResults}
         />
       )}
     </div>
