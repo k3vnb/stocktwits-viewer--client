@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
-import { shape, string, arrayOf, number, func } from 'prop-types';
+import { shape, string, arrayOf, number, func, bool } from 'prop-types';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+import { SmallLoadingSpinner } from '../LoadingSpinner/LoadingSpinner';
 import AppContext from '../../AppContext';
 import './SearchResultsFlyout.css';
 
@@ -10,6 +11,7 @@ const AutoCompleteFlyout = ({
   position: { top, width },
   toggleShowSearchResults,
   clearSearchTerm,
+  searchResultsLoading,
 }) => {
   const { selectedSymbols, addSelectedSymbol } = useContext(AppContext);
   const handleSelectSymbol = (symbol) => {
@@ -44,10 +46,12 @@ const AutoCompleteFlyout = ({
               </h5>
             </div>
           ))}
+          {searchResultsLoading && <SmallLoadingSpinner />}
         </div>
       ) : (
         <div className="search-results__container" style={{ top, width }}>
           No matching results found
+          {searchResultsLoading && <SmallLoadingSpinner />}
         </div>
       )}
     </ClickAwayListener>
@@ -71,6 +75,7 @@ AutoCompleteFlyout.propTypes = {
   toggleShowSearchResults: func.isRequired,
   setSearchResults: func.isRequired,
   clearSearchTerm: func.isRequired,
+  searchResultsLoading: bool.isRequired,
 };
 
 AutoCompleteFlyout.defaultProps = {

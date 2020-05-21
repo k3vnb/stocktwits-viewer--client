@@ -7,7 +7,7 @@ import ChipContainer from './components/ChipContainer/ChipContainer';
 import SearchBar from './components/SearchBar/SearchBar';
 import TweetContainer from './components/TweetContainer/TweetContainer';
 import TweetPage from './components/TweetContainer/TweetPage';
-import LoadingSpinner from './components/LoadingSpinner/LoadingSpinner';
+import { LoadingSpinner } from './components/LoadingSpinner/LoadingSpinner';
 import EmptyPage from './components/EmptyPage/EmptyPage';
 import './App.css';
 

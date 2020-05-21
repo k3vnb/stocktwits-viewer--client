@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { Button } from '@material-ui/core';
 import { useHistory, useParams } from 'react-router-dom';
 import AppContext from '../../AppContext';
-import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
+import { LoadingSpinner } from '../LoadingSpinner/LoadingSpinner';
 import Tweet from './Tweet';
 import './TweetContainer.css';
 

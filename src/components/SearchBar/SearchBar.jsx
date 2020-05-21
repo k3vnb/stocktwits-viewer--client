@@ -15,6 +15,7 @@ const SearchBar = () => {
   const { setError } = useContext(AppContext);
   const [searchTerm, setSearchTerm] = useState('');
   const [showSearchResults, setShowSearchResults] = useState(false);
+  const [searchResultsLoading, setSearchResultsLoading] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
   const [searchResultPosition, setSearchResultPosition] = useState({
     top: 0,
@@ -54,6 +55,7 @@ const SearchBar = () => {
     setSearchTerm(e.target.value);
     // character length is set to mitigate exceeding rate limit
     if (searchTerm.length && searchTerm.length < 12) {
+      setSearchResultsLoading(true);
       fetch(`${config.API_ENDPOINT}/search/${e.target.value}`)
         .then((res) => {
           if (res.ok) {
@@ -61,9 +63,13 @@ const SearchBar = () => {
           }
           throw new Error('Could not fetch data');
         })
-        .then(({ results }) => setSearchResults(results))
+        .then(({ results }) => {
+          setSearchResults(results);
+          setSearchResultsLoading(false);
+        })
         .catch((err) => {
           setError(`Oops. ${err.message}`);
+          setSearchResultsLoading(false);
         });
     }
   };
@@ -92,6 +98,7 @@ const SearchBar = () => {
           toggleShowSearchResults={toggleShowSearchResults}
           clearSearchTerm={clearSearchTerm}
           setSearchResults={setSearchResults}
+          searchResultsLoading={searchResultsLoading}
         />
       )}
     </div>
