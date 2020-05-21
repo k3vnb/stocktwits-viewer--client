@@ -30,7 +30,7 @@ const AutoCompleteFlyout = ({
   };
   return (
     <ClickAwayListener onClickAway={toggleShowSearchResults}>
-      {searchResults.length ? (
+      {!!searchResults && searchResults.length ? (
         <div className="search-results__container" style={{ top, width }}>
           {searchResults.map((symbolObj) => (
             <div
