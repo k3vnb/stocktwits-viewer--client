@@ -40,12 +40,9 @@ const AutoCompleteFlyout = ({
 
   return (
     <ClickAwayListener onClickAway={toggleShowSearchResults}>
-      <div className="search-results__container--outer">
+      <div className="search-results__container--outer" style={{ top, width }}>
         {searchResults.length ? (
-          <div
-            className="search-results__container--inner"
-            style={{ top, width }}
-          >
+          <div className="search-results__container--inner">
             {searchResults.map((symbolObj) => (
               <div
                 className="results__list-item"
@@ -82,7 +79,8 @@ const AutoCompleteFlyout = ({
             className="search-results__container--error-message"
             style={{ top, width }}
           >
-            {errorMessage || 'No matching results found'}
+            {errorMessage ||
+              (!searchResultsLoading && 'No matching results found')}
           </div>
         )}
         {searchResultsLoading && <SmallLoadingSpinner />}
