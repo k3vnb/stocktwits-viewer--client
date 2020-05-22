@@ -11,6 +11,13 @@
   top: 0;
   left: 0;
 }
+.loading-spinner-container--small {
+  background-color: rgba(255, 255, 255, 0.233);
+  transform: scale(0.6);
+  position: absolute;
+  top: 0;
+  left: 0;
+}
 .lds-default {
   display: inline-block;
   position: relative;
