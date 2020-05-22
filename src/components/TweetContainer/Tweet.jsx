@@ -10,28 +10,32 @@ const Tweet = ({ tweetProps }) => {
     likes,
     user: { avatar_url_ssl, username },
   } = tweetProps;
+
   const regexMessageBody = (str) => {
     const urlRE = /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/;
-    const symbolRE = /(\s\$[A-Z]*)|(^\$[A-Z]*)/gim;
+    const symbolRE = /(\s\$[A-Z]+)|(^\$[A-Z]+)/gim;
     const matchURL = str.match(urlRE);
     const url = matchURL && matchURL[0];
     const matchSymbol = str.match(symbolRE);
-    let newStr = str;
+    let newStr = str.replace(
+      url,
+      `<a href=${url} target="_blank" rel="noopener" style="font-size: .75rem; font-family: Arial, Helvetica, sans-serif;">${url}</a>`
+    );
     const addSymbolStyles = (str_, symbol) => {
+      const symbolSubstr = symbol.trim().substring(1);
       newStr = str_.replace(
         symbol,
-        `<span style="color: #19ad19">${symbol}</span>`
+        `<a href="https://stocktwits.com/symbol/${symbolSubstr}" target="_blank" rel="noopener" style="color: #19ad19; text-decoration: none">${symbol}</a>`
       );
     };
     if (matchSymbol && matchSymbol.length) {
       matchSymbol.forEach((match) => addSymbolStyles(newStr, match));
     }
-    return newStr.replace(
-      url,
-      `<a href=${url} target="_blank" rel="noopener" style="font-size: .75rem; font-family: Arial, Helvetica, sans-serif;">${url}</a>`
-    );
+    return newStr;
   };
+
   const newBody = regexMessageBody(body);
+
   return (
     <article className="tweet">
       <div className="tweet__avatar-container">
