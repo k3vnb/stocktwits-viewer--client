@@ -10,6 +10,28 @@ const Tweet = ({ tweetProps }) => {
     likes,
     user: { avatar_url_ssl, username },
   } = tweetProps;
+  const regexMessageBody = (str) => {
+    const urlRE = /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/;
+    const symbolRE = /(\s\$[A-Z]*)|(^\$[A-Z]*)/gim;
+    const matchURL = str.match(urlRE);
+    const url = matchURL && matchURL[0];
+    const matchSymbol = str.match(symbolRE);
+    let newStr = str;
+    const addSymbolStyles = (str_, symbol) => {
+      newStr = str_.replace(
+        symbol,
+        `<span style="color: #19ad19">${symbol}</span>`
+      );
+    };
+    if (matchSymbol && matchSymbol.length) {
+      matchSymbol.forEach((match) => addSymbolStyles(newStr, match));
+    }
+    return newStr.replace(
+      url,
+      `<a href=${url} target="_blank" rel="noopener" style="font-size: .75rem; font-family: Arial, Helvetica, sans-serif;">${url}</a>`
+    );
+  };
+  const newBody = regexMessageBody(body);
   return (
     <article className="tweet">
       <div className="tweet__avatar-container">
@@ -21,7 +43,7 @@ const Tweet = ({ tweetProps }) => {
         </div>
         <div
           className="tweet__content--body"
-          dangerouslySetInnerHTML={{ __html: body }}
+          dangerouslySetInnerHTML={{ __html: newBody }}
         />
         <div className="tweet__content--footer">
           <Moment fromNow>{created_at}</Moment>
